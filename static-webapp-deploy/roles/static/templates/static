@@ -1,0 +1,28 @@
+
+server {
+ 
+  listen 80;
+ 
+  listen [::]:80;
+ 
+  server_name static;
+ 
+  root /var/www/html/home;
+ 
+# Add index.php to the list if you are using PHP
+ 
+  index index.html index.htm index.nginx-debian.html;
+ 
+location / {
+ 
+  return 301 $scheme://static/home$request_uri;
+ 
+}
+ 
+location /home {
+ 
+  try_files $uri $uri/ =404;
+ 
+  }
+ 
+}
