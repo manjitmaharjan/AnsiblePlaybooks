@@ -1,0 +1,56 @@
+---
+- name: Ansible playbook 
+  hosts: webserver
+  become: true
+  vars:
+    source: /Users/sudeep/working/morning/AnsiblePlaybooks/simple-playbook/source_file
+    destination: /etc
+  tasks:
+  - name: ping the host server 
+    ping:
+
+  - name: Installing gdeb package 
+    apt:
+      name: gdebi
+      state: absent
+
+  - name: Copying file from local to remote server 
+    copy:
+      src: '{{ source }}'
+      dest: '{{ destination }}'
+    become: true
+
+  - name: "loop through list"
+    debug:
+      msg: "An item: {{ item }}"
+    with_items:
+      - 1
+      - 2
+      - 3
+
+
+  
+  - name: Installing latest version of nginx 
+    apt:
+      name: nginx
+      state: latest
+
+
+  - name: Installing multiple packages 
+    apt:
+      name: '{{ item }}'
+      state: present
+
+    with_items:
+      - gdebi
+      - nginx 
+    notify:
+    - restart nginx
+
+
+  handlers:
+  - name: restart nginx 
+    service:
+      name: nginx
+      state: restarted
+      
